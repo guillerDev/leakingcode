@@ -34,7 +34,7 @@ steps:
 
   - name: 'gcr.io/cloud-builders/gcloud'
     id: 'Deploy'
-    args: ['beta', 'run', 'deploy', '${_ENV}/$REPO_NAME',
+    args: ['beta', 'run', 'deploy', '${_ENV}-$REPO_NAME',
            '--platform=managed',
            '--region=europe-west1',
            '--allow-unauthenticated',
