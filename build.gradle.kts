@@ -43,8 +43,9 @@ orchid {
     theme = "FutureImperfect"
     version = "${project.version}"
     environment = if (isProd) "production" else "debug"
-    baseUrl = when {
-        isProd -> envOrProperty("BASE_URL", required = true)
+    baseUrl = when(envOrProperty("ENV")) {
+        "prod" -> envOrProperty("BASE_URL", required = true)
+        "dev" -> envOrProperty("BASE_URL", required = true)
         else -> "http://localhost:8080"
     }
     srcDir = envOrProperty("SRC_DIR")
