@@ -22,6 +22,11 @@ steps:
     args: ['-q', 'cp', '-r', '$_DEST_DIR', 'gs://${_STATIC_SERVER}/$SHORT_SHA']
     waitFor: ['Compile']
 
+  - name: 'gcr.io/cloud-builders/gsutil'
+    id: 'Update404'
+    args: ['web', 'set', '-e', '${SHORT_SHA}/404.html', 'gs://${_STATIC_SERVER}/$SHORT_SHA']
+    waitFor: ['Static']
+
   - name: "gcr.io/cloud-builders/docker"
     id: 'Push'
     args: ["push", "gcr.io/$PROJECT_ID/$REPO_NAME:$SHORT_SHA"]
