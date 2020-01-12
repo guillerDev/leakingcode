@@ -13,7 +13,7 @@ steps:
     args: ['build',
            '--build-arg', 'STATIC_WEB_SERVER=http://${_STATIC_SERVER}/$SHORT_SHA',
            '--build-arg', 'NGINX_PORT=${_NGINX_PORT}',
-           '--tag=gcr.io/$PROJECT_ID/$REPO_NAME:$SHORT_SHA',
+           '--tag=gcr.io/$PROJECT_ID/$_ENV/$REPO_NAME:$SHORT_SHA',
            '.']
     waitFor: ['-']
 
@@ -29,14 +29,14 @@ steps:
 
   - name: "gcr.io/cloud-builders/docker"
     id: 'Push'
-    args: ["push", "gcr.io/$PROJECT_ID/$REPO_NAME:$SHORT_SHA"]
+    args: ["push", "gcr.io/$PROJECT_ID/$_ENV/$REPO_NAME:$SHORT_SHA"]
     waitFor: ['Build_Server']
 
   - name: 'gcr.io/cloud-builders/gcloud'
     id: 'Deploy'
-    args: ['beta', 'run', 'deploy', '$REPO_NAME',
+    args: ['beta', 'run', 'deploy', '${_ENV}/$REPO_NAME',
            '--platform=managed',
            '--region=europe-west1',
            '--allow-unauthenticated',
-           '--image=gcr.io/$PROJECT_ID/$REPO_NAME:$SHORT_SHA']
+           '--image=gcr.io/$PROJECT_ID/$_ENV/$REPO_NAME:$SHORT_SHA']
     waitFor: ['Push', 'Static']
