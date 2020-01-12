@@ -24,7 +24,7 @@ steps:
 
   - name: 'gcr.io/cloud-builders/gsutil'
     id: 'Update404'
-    args: ['web', 'set', '-e', '${SHORT_SHA}/404.html', 'gs://${_STATIC_SERVER}/$SHORT_SHA']
+    args: ['web', 'set', '-e', '${SHORT_SHA}/404.html', 'gs://${_STATIC_SERVER}']
     waitFor: ['Static']
 
   - name: "gcr.io/cloud-builders/docker"
