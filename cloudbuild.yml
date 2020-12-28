@@ -6,6 +6,9 @@ steps:
       - 'ENV=$_ENV'
       - 'SRC_DIR=$_SRC_DIR'
       - 'DEST_DIR=$_DEST_DIR'
+    args:
+      - './gradlew'
+      - 'orchidBuild'
     waitFor: ['-']
 
   - name: 'gcr.io/cloud-builders/docker'
