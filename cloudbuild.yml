@@ -1,5 +1,5 @@
 steps:
-  - name: 'gcr.io/$PROJECT_ID/orchid:latest'
+  - name: 'openjdk:11.0.5-jdk'
     id: 'Compile'
     env:
       - 'BASE_URL=$_BASE_URL'
