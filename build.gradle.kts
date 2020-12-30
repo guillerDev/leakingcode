@@ -18,7 +18,7 @@ dependencies {
     implementation(kotlin("stdlib-jdk8"))
     orchidCompile("io.github.javaeden.orchid:OrchidBlog:$orchidVersion")
     orchidCompile("io.github.javaeden.orchid:OrchidPluginDocs:$orchidVersion")
-    orchidRuntime("io.github.javaeden.orchid:OrchidPosts:$orchidVersion")
+    orchidCompile("io.github.javaeden.orchid:OrchidPosts:$orchidVersion")
     orchidCompile("io.github.javaeden.orchid:OrchidFutureImperfect:$orchidVersion")
     orchidCompile("io.github.javaeden.orchid:OrchidSearch:$orchidVersion")
     orchidRuntime("io.github.javaeden.orchid:OrchidSyntaxHighlighter:$orchidVersion")
