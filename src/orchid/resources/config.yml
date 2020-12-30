@@ -37,8 +37,6 @@ taxonomies:
 posts:
   authors:
     - name: 'Guillermo Robles'
-      avatar: 'https://storage.googleapis.com/globa-static-leakingcode/media/author-Guiller.jpeg'
-      email: 'guilleponfe+leakingcode@gmail.com'
   postPages: # Common configuration for all posts
     layout: single # https://orchid.run/wiki/user-manual/core-concepts/templates#layouts
     components: # https://orchid.run/wiki/user-manual/core-concepts/components

@@ -1,6 +1,6 @@
 steps:
   - name: 'openjdk:11.0.5-jdk'
-    id: 'Compile'
+    id: 'Build_Orchid'
     env:
       - 'BASE_URL=$_BASE_URL'
       - 'ENV=$_ENV'
@@ -12,7 +12,7 @@ steps:
     waitFor: ['-']
 
   - name: 'gcr.io/cloud-builders/docker'
-    id: 'Build_Server'
+    id: 'Build_Proxy'
     args: ['build',
            '--build-arg', 'STATIC_WEB_SERVER=http://${_STATIC_SERVER}/$SHORT_SHA',
            '--build-arg', 'NGINX_PORT=${_NGINX_PORT}',
@@ -23,7 +23,7 @@ steps:
   - name: 'gcr.io/cloud-builders/gsutil'
     id: 'Static'
     args: ['-q', 'cp', '-r', '$_DEST_DIR', 'gs://${_STATIC_SERVER}/$SHORT_SHA']
-    waitFor: ['Compile']
+    waitFor: ['Build_Orchid']
 
   - name: 'gcr.io/cloud-builders/gsutil'
     id: 'Update404'
@@ -33,7 +33,7 @@ steps:
   - name: "gcr.io/cloud-builders/docker"
     id: 'Push'
     args: ["push", "gcr.io/$PROJECT_ID/$_ENV/$REPO_NAME:$SHORT_SHA"]
-    waitFor: ['Build_Server']
+    waitFor: ['Build_Proxy']
 
   - name: 'gcr.io/cloud-builders/gcloud'
     id: 'Deploy'
