@@ -35,8 +35,6 @@ taxonomies:
         - entryCount
 
 posts:
-  authors:
-    - name: 'Guillermo Robles'
   postPages: # Common configuration for all posts
     layout: single # https://orchid.run/wiki/user-manual/core-concepts/templates#layouts
     components: # https://orchid.run/wiki/user-manual/core-concepts/components

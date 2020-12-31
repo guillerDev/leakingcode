@@ -5,6 +5,5 @@ avatar: 'https://storage.googleapis.com/globa-static-leakingcode/media/author-Gu
 email: 'guilleponfe+leakingcode@gmail.com'
 ---
 
-[leaking code](https://leakingcode.com)
 
 Contact me in <guilleponfe+leakingcode@gmail.com>
