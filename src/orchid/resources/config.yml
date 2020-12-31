@@ -20,6 +20,7 @@ theme:
 
   extraCss:
     - 'assets/css/extraCss.scss'
+    - 'assets/css/pygments.scss' # this file is already available in the plugin's resources
   extraJs:
     - 'assets/js/extraJs.js'
 
@@ -34,10 +35,6 @@ taxonomies:
         - entryCount
 
 posts:
-  authors:
-    - name: 'Guillermo Robles'
-      avatar: 'https://lorempixel.com/320/320/nature/'
-      email: 'guilleponfe+leakingcode@gmail.com'
   postPages: # Common configuration for all posts
     layout: single # https://orchid.run/wiki/user-manual/core-concepts/templates#layouts
     components: # https://orchid.run/wiki/user-manual/core-concepts/components
