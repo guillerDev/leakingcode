@@ -4,7 +4,7 @@ plugins {
 }
 
 group = "com.leakingcode.blog"
-version = "0.9"
+version = "1"
 
 repositories {
     jcenter()
