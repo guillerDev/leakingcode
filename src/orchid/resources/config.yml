@@ -2,7 +2,7 @@
 site:
   about:
     siteName: Leaking code
-    siteDescription: This is a short description of this blog.
+    siteDescription: Blog about traveling and pleasures of software development.
     avatar: 'assets/media/icon.png'
 
 theme:

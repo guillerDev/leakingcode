@@ -51,5 +51,4 @@ orchid {
     }
     srcDir = envOrProperty("SRC_DIR")
     destDir = envOrProperty("DEST_DIR")
-
 }
