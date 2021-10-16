@@ -1,13 +1,14 @@
 ---
-author: Guillermo Robles title: Build and run Kotlin in server side... featuredImage:
-assets/media/posts/google-cloud-platform.png permalink: ':year/:slug' tags:
-
+author: Guillermo Robles 
+title: Build and run Kotlin in server side...
+featuredImage: assets/media/posts/google-cloud-platform.png
+permalink: ':year/:slug'
+tags:
 - guides
 - kotlin
 - ktor
 - server-side
 - gcloud
-
 draft: false
 
 ---
@@ -175,13 +176,14 @@ To make Gcloud Build work and deploy to Gcloud Run, it needs to
 have a [trigger](https://cloud.google.com/build/docs/automating-builds/create-manage-triggers). I have set up a trigger
 that executes for every push to master in my [repo](https://github.com/guillerDev/gcloudrundemo).
 
+Gcloud Run is a very simple to manage, once that a commit has pushed to a Gcloud Build trigger, a 
+new service is created in Gcloud Run. For next builds, it will create revision under same service and will migrate traffic to newest.
+It provides some metrics out of the box which can help to define the cloud run instance capacity, also it is possible to
+map custom domains to the entry point.
+
+
 ## Conclusion
 
-This is an easy approach for software developers who do not want to be concerned about infrastructure, security,
+This is an easy approach for software developers who do not want to be concerned about security,
 deployments and scalability. Just with few lines of code is possible to set up a decent infrastructure at Google Cloud,
 which is ready to deploy for every single commit into a git repository.
-
-
-
-
-
