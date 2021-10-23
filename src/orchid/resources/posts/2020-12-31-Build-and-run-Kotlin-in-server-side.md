@@ -174,7 +174,7 @@ static web server. In the third step, jib creates an image which will be deploye
 
 To make Gcloud Build work and deploy to Gcloud Run, it needs to
 have a [trigger](https://cloud.google.com/build/docs/automating-builds/create-manage-triggers). I have set up a trigger
-that executes for every push to master in my [repo](https://github.com/guillerDev/gcloudrundemo).
+that executes for every push to master in <a href="https://github.com/guillerDev/gcloudrundemo" target="_blank">repo</a>.
 
 Gcloud Run is a very simple to manage, once that a commit has pushed to a Gcloud Build trigger, a 
 new service is created in Gcloud Run. For next builds, it will create revision under same service and will migrate traffic to newest.
