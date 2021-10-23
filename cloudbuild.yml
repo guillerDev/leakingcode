@@ -1,5 +1,5 @@
 steps:
-  - name: 'openjdk:11.0.5-jdk'
+  - name: 'openjdk:11'
     id: 'Build_Orchid'
     env:
       - 'BASE_URL=$_BASE_URL'

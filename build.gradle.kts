@@ -1,10 +1,10 @@
 plugins {
-    kotlin("jvm") version "1.4.21"
-    id ("com.eden.orchidPlugin") version "0.21.0"
+    kotlin("jvm")  version "1.5.31"
+    id ("com.eden.orchidPlugin") version "0.21.1"
 }
 
 group = "com.leakingcode.blog"
-version = "1"
+version = "1.0.1"
 
 repositories {
     jcenter()
@@ -14,14 +14,13 @@ repositories {
 }
 
 dependencies {
-    val orchidVersion = "0.21.0"
-    implementation(kotlin("stdlib-jdk8"))
-    orchidCompile("io.github.javaeden.orchid:OrchidBlog:$orchidVersion")
-    orchidCompile("io.github.javaeden.orchid:OrchidPluginDocs:$orchidVersion")
-    orchidCompile("io.github.javaeden.orchid:OrchidPosts:$orchidVersion")
-    orchidCompile("io.github.javaeden.orchid:OrchidFutureImperfect:$orchidVersion")
-    orchidCompile("io.github.javaeden.orchid:OrchidSearch:$orchidVersion")
-    orchidRuntime("io.github.javaeden.orchid:OrchidSyntaxHighlighter:$orchidVersion")
+    val orchidVersion = "0.21.1"
+    orchidImplementation("io.github.javaeden.orchid:OrchidBlog:$orchidVersion")
+    orchidImplementation("io.github.javaeden.orchid:OrchidPluginDocs:$orchidVersion")
+    orchidImplementation("io.github.javaeden.orchid:OrchidPosts:$orchidVersion")
+    orchidImplementation("io.github.javaeden.orchid:OrchidFutureImperfect:$orchidVersion")
+    orchidImplementation("io.github.javaeden.orchid:OrchidSearch:$orchidVersion")
+    orchidRuntimeOnly("io.github.javaeden.orchid:OrchidSyntaxHighlighter:$orchidVersion")
 }
 
 tasks {
@@ -51,5 +50,4 @@ orchid {
     }
     srcDir = envOrProperty("SRC_DIR")
     destDir = envOrProperty("DEST_DIR")
-
 }

@@ -1,34 +1,51 @@
 ---
-author: Guillermo Robles
+author: Guillermo Robles 
 title: Build and run Kotlin in server side...
 featuredImage: assets/media/posts/google-cloud-platform.png
 permalink: ':year/:slug'
 tags:
 - guides
 - kotlin
-- ktor  
+- ktor
 - server-side
 - gcloud
 draft: false
+
 ---
+
 ### ...with [Google Cloud Platform](https://cloud.google.com/).
 
+Kotlin is a modern language with a rich syntax that has gained tremendous popularity among Android developers in the
+last years. At [Google I/O 19](https://developer.android.com/kotlin/first), Google announced that Kotlin will be first
+platform language in Android.
 
-Kotlin is a modern language with a rich syntax that has gained tremendous popularity among Android developers.
-At [Google I/O 19](https://developer.android.com/kotlin/first), Google announced that Kotlin will be first platform language in Android.
+Kotlin has not been only designed for Android. Actually, it can target
+different [platforms](https://kotlinlang.org/docs/reference/mpp-supported-platforms.html)
+such as JVM (Java Virtual Machine), JavaScript, armv7 and armv8, x64 and x86, web assembly among other targets.
 
-Kotlin has not been only designed for Android.
-It can target different [platforms](https://kotlinlang.org/docs/reference/mpp-supported-platforms.html) such as JVM (Java Virtual Machine), Java script, armv7 and armv8, x64 and x86, and web assembly.
+In this post, I am going to show how affordable is to develop with Kotlin and a bit of YML :) a back-end service that
+follows [The Twelve-Factor App](https://12factor.net) with a very little learning curve for those developers who are
+familiarized already with Kotlin.
 
-This guide try to show how affordable can be to only use Kotlin (and a bit of YML :) ) to create a back-end service that aligns with [The Twelve-Factor App](https://12factor.net) with a very little learning curve for those who are familiarized with Android development.
+Firstly, in my [git repository](https://github.com/guillerDev/gcloudrundemo)
+has [codebase](https://12factor.net/codebase) that illustrates this showcase.
 
-First of all, there is this git repository with the [codebase](https://12factor.net/codebase) that illustrate this guide. All [software dependencies](https://12factor.net/dependencies) are declared using [Gradle](https://gradle.org/), the three main dependencies are [Ktor](https://ktor.io/), [Jib](https://github.com/GoogleContainerTools/jib) and [logback](http://logback.qos.ch/). Ktor is a web framework built by and for Kotlin developers. Jib is going to help us to achieve containerization with [docker](https://www.docker.com/) with no need to write any dockerfile. Jib will create a [distroless docker image](https://github.com/GoogleContainerTools/distroless) which only contains our application and its dependencies for runtime. Logback is a logging framework that will stream to [stackdriver](https://cloud.google.com/products/operations) our [application behavior](https://12factor.net/logs).
+All [software dependencies](https://12factor.net/dependencies) are declared using a build automation tool
+like [Gradle](https://gradle.org/), three main dependencies are [Ktor](https://ktor.io/)
+, [Jib](https://github.com/GoogleContainerTools/jib) and
+[logback](http://logback.qos.ch/). Ktor is a web framework built by and for Kotlin developers. Jib is going to help us
+to achieve containerization with [docker](https://www.docker.com/) with no need to write a dockerfile. Jib will create
+a [distroless docker image](https://github.com/GoogleContainerTools/distroless)
+which only contains our application and its dependencies for runtime environment. Logback is a logging framework that
+will stream to [stackdriver](https://cloud.google.com/products/operations)
+our [application behavior](https://12factor.net/logs).
 
-Moreover [cloud build](https://cloud.google.com/cloud-build/) will provide [continuous deployment](https://12factor.net/build-release-run) to our infrastructure, and [cloud run](https://cloud.google.com/run/) will bring our docker image to a runtime environment which it is fully managed and scales horizontally.
+Moreover [cloud build](https://cloud.google.com/cloud-build/) will provide
+[continuous deployment](https://12factor.net/build-release-run) to our infrastructure and
+[cloud run](https://cloud.google.com/run/) will bring our docker image to a runtime environment which it is fully
+managed, and it auto-scales horizontally.
 
-
-
-Let's start with Ktor, it provides an intuitive DSL for defining our application routing.
+Ktor provides an intuitive DSL for defining our application routing.
 
 {% highlight 'kotlin' %}
 
@@ -40,22 +57,23 @@ Let's start with Ktor, it provides an intuitive DSL for defining our application
 
 {% endhighlight %}
 
-This routing is very simple, it defines a GET method in HTTP for the path "/hello", it responds with "Hi! ktor is running!", documentation and learning docs can be found in [ktor official channel](https://ktor.io/learn/).
+This routing is very simple, it defines a GET method in HTTP for path "/hello", it responds in plain text with
+"Hi! ktor is running!", you can try out [here](https://ktor-t4xwpg5bfq-ew.a.run.app/hello) More extended documentation
+and learning material can be found in [Ktor official channel](https://ktor.io/learn/).
 
-
-Jib used a JVm 12 LTS wihch is a distroless, meaning that very light etc.
-
-If you are familiar with Gradle this build configuration will be straightforward, it describes plugin and dependency definitions.
-The most important thing to recall is the target compatibility. Jib distroless image is base in OpenJDK 11 which is the last 
-long supported version. We need to define the target compatibility in case that build environment is using a higher JVM version. 
+If you have worked with Gradle before, this build configuration will seem straightforward for you. It describes plugins
+and dependency definitions. The most important thing to recall is JVM target compatibility. Jib distroless image is base
+in OpenJDK 11 which is the last long support version. We need to define the target compatibility in case that build
+environment is using a higher JVM version. Also, Jib needs to have a reference for an entry point to start up the
+container, I have defined mainClass which is ***io.ktor.server.jetty.DevelopmentEngine***
 
 {% highlight 'groovy' %}
 
     buildscript {
-        ext.kotlin_version = '1.4.20'
-        ext.ktor_version = '1.4.3'
-        ext.jib_version = '2.6.0'
-        ext.logback_version = '1.2.3'
+        ext.kotlin_version = '1.5.31'
+        ext.ktor_version = '1.6.4'
+        ext.jib_version = '3.1.4'
+        ext.logback_version = '1.2.6'
 
         repositories {
             jcenter()
@@ -68,8 +86,8 @@ long supported version. We need to define the target compatibility in case that 
     plugins {
         id "com.google.cloud.tools.jib" version "1.8.0"
         id "org.jmailen.kotlinter" version "3.2.0"
+        id "org.jetbrains.kotlin.jvm" version "1.5.31"
     }
-    apply plugin: 'kotlin'
     apply plugin: 'application' // JVM plugin
 
     mainClassName = "io.ktor.server.jetty.DevelopmentEngine"
@@ -81,19 +99,20 @@ long supported version. We need to define the target compatibility in case that 
     }
 
     group 'com.leakingcode'
-    version '0.1'
+    version '0.2'
 
     repositories {
         mavenCentral()
     }
 
     dependencies {
-        implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
         implementation "io.ktor:ktor-server-core:$ktor_version"
         implementation "io.ktor:ktor-server-jetty:$ktor_version"
         implementation "ch.qos.logback:logback-classic:$logback_version"
+
         testImplementation "org.jetbrains.kotlin:kotlin-test"
         testImplementation "org.jetbrains.kotlin:kotlin-test-junit"
+        testImplementation "io.ktor:ktor-server-test-host:$ktor_version"
     }
 
     compileKotlin {
@@ -113,54 +132,59 @@ long supported version. We need to define the target compatibility in case that 
 
 {% endhighlight %}
 
-
-Cloud build takes a configuration file in Yaml that describes how is the process deliver CI/CD. First step checks the 
-application, it runs unit test and lint. Second step uploads the unit test results to static web server. 
-In the third step, jib creates an image which will be deployed by executing the last step. 
-
+Cloud Build takes a configuration file in Yaml that describes how is working CI/CD (Continuous integration and continuous
+delivery) process. First step checks application, it runs unit test and lint. Second step uploads the unit test results to a
+static web server. In the third step, jib creates a docker image which will be deployed to Gcloud Run in last step.
 
 {% highlight 'yaml' %}
 
     steps:
-    - name: 'openjdk:11'
-      id: Check
-      args: ['sh', 'check.sh']
-      env:
-        - 'REPO_NAME=$REPO_NAME'
-        - 'PROJECT_ID=$PROJECT_ID'
-        - 'COMMIT_SHA=$COMMIT_SHA'
-        - 'BRANCH_NAME=$BRANCH_NAME'
-        - 'BUCKET_NAME=$_BUCKET_NAME'
+      - name: 'openjdk:11'
+        id: Check
+        args: ['sh', 'check.sh']
+        env:
+          - 'REPO_NAME=$REPO_NAME'
+          - 'PROJECT_ID=$PROJECT_ID'
+          - 'COMMIT_SHA=$COMMIT_SHA'
+          - 'BRANCH_NAME=$BRANCH_NAME'
+          - 'BUCKET_NAME=$_BUCKET_NAME'
     
-    - name: 'gcr.io/cloud-builders/gsutil'
-      id: store_unit_test_results
-      args: ['-q', 'cp', '-r', '/workspace/build/reports/tests/test/', 'gs://$_BUCKET_NAME/$BRANCH_NAME/$COMMIT_SHA']
-      waitFor: ['Check']
+      - name: 'gcr.io/cloud-builders/gsutil'
+        id: Store_unit_test_results
+        args: ['-q', 'cp', '-r', '/workspace/build/reports/tests/test/',
+        'gs://$_BUCKET_NAME/$BRANCH_NAME/$COMMIT_SHA']
+        waitFor: ['Check']
     
-    - name: 'openjdk:11'
-      id: Jib
-      args: ['./gradlew', 'check', 'jib', '--image', 'gcr.io/$PROJECT_ID/$BRANCH_NAME:$SHORT_SHA']
+      - name: 'openjdk:11'
+        id: Jib
+        args: ['./gradlew', 'check', 'jib', '--image', 'gcr.io/$PROJECT_ID/$BRANCH_NAME:$SHORT_SHA']
     
-    - name: 'gcr.io/cloud-builders/gcloud'
-      id: Deploy
-      args: ['beta', 'run', 'deploy', '$_SERVICE_NAME', '--platform=managed', '--region=europe-west1', '--allow-unauthenticated', '--image=gcr.io/$PROJECT_ID/$BRANCH_NAME:$SHORT_SHA']
+      - name: 'gcr.io/cloud-builders/gcloud'
+        id: Deploy
+        args: ['beta', 'run', 'deploy', '$_SERVICE_NAME',
+        '--platform=managed', '--region=europe-west1',
+        '--allow-unauthenticated', '--image=gcr.io/$PROJECT_ID/$BRANCH_NAME:$SHORT_SHA']
     
     artifacts:
-    objects:
-    location: 'gs://$_BUCKET_NAME/$BRANCH_NAME/$COMMIT_SHA'
-    paths: ["'/workspace/output.txt'"]
-
+      objects:
+        location: 'gs://$_BUCKET_NAME/$BRANCH_NAME/$COMMIT_SHA'
+        paths: ["'/workspace/output.txt'"]
 
 {% endhighlight %}
 
+In order to start this process, Gcloud Build needs to have a trigger. For this demo, I have set up a trigger
+that executes for every push to master in <a href="https://github.com/guillerDev/gcloudrundemo" target="_blank">repo</a>.
+It is possible to define triggers with regex expressions for git branches and tags. 
+
+Gcloud Run is very simple to manage, once that a build completes successfully, a docker image is deployed into a defined
+service ( defined environment variable $_SERVICE_NAME). For every success build, new version service is created and all traffic 
+from previous version is migrated to newest.
+Gcloud Run provides some metrics out of the box which can help to define the cloud run instance capacity, also it is possible to
+map custom domains to the entry point.
 
 
 ## Conclusion
 
-This is an easy approach for software developers who do not want to be concerned about infrastructure, security, deployments, scalability, etc.
-Combining Kotlin+Ktor+JibCloud build+Cloud run allows us to have a proper set up for backend services that can be consumed by Android, iOS and web clients.
-
-
-
-
-
+This is an easy approach for software developers who do not want to be concerned about security,
+deployments and scalability. Just with few lines of code is possible to set up a decent infrastructure at Google Cloud,
+which is ready to deploy for every single commit into a git repository.
