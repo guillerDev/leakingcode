@@ -132,9 +132,9 @@ container, I have defined mainClass which is ***io.ktor.server.jetty.Development
 
 {% endhighlight %}
 
-Cloud build takes a configuration file in Yaml that describes how is CI/CD (Continuous integration and continuous
-delivery). First step checks the application, it runs unit test and lint. Second step uploads the unit test results to
-static web server. In the third step, jib creates an image which will be deployed by executing the last step.
+Cloud Build takes a configuration file in Yaml that describes how is working CI/CD (Continuous integration and continuous
+delivery) process. First step checks application, it runs unit test and lint. Second step uploads the unit test results to a
+static web server. In the third step, jib creates a docker image which will be deployed to Gcloud Run in last step.
 
 {% highlight 'yaml' %}
 
@@ -172,13 +172,14 @@ static web server. In the third step, jib creates an image which will be deploye
 
 {% endhighlight %}
 
-To make Gcloud Build work and deploy to Gcloud Run, it needs to
-have a [trigger](https://cloud.google.com/build/docs/automating-builds/create-manage-triggers). I have set up a trigger
+In order to start this process, Gcloud Build needs to have a trigger. For this demo, I have set up a trigger
 that executes for every push to master in <a href="https://github.com/guillerDev/gcloudrundemo" target="_blank">repo</a>.
+It is possible to define triggers with regex expressions for git branches and tags. 
 
-Gcloud Run is a very simple to manage, once that a commit has pushed to a Gcloud Build trigger, a 
-new service is created in Gcloud Run. For next builds, it will create revision under same service and will migrate traffic to newest.
-It provides some metrics out of the box which can help to define the cloud run instance capacity, also it is possible to
+Gcloud Run is very simple to manage, once that a build completes successfully, a docker image is deployed into a defined
+service ( defined environment variable $_SERVICE_NAME). For every success build, new version service is created and all traffic 
+from previous version is migrated to newest.
+Gcloud Run provides some metrics out of the box which can help to define the cloud run instance capacity, also it is possible to
 map custom domains to the entry point.
 
 
