@@ -14,7 +14,7 @@ steps:
   - name: 'gcr.io/cloud-builders/docker'
     id: 'Build_Proxy'
     args: ['build',
-           '--build-arg', 'STATIC_WEB_SERVER=http://${_STATIC_SERVER}/$SHORT_SHA',
+           '--build-arg', 'STATIC_WEB_SERVER=https://storage.googleapis.com/${_STATIC_SERVER}/$SHORT_SHA',
            '--build-arg', 'NGINX_PORT=${_NGINX_PORT}',
            '--tag=gcr.io/$PROJECT_ID/$_ENV/$REPO_NAME:$SHORT_SHA',
            '.']
