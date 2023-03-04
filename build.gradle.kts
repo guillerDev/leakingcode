@@ -1,5 +1,5 @@
 plugins {
-    kotlin("jvm")  version "1.5.31"
+    kotlin("jvm")  version "1.7.21"
     id ("com.eden.orchidPlugin") version "0.21.1"
 }
 
